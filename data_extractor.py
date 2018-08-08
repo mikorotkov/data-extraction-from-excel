@@ -63,6 +63,12 @@ for c_id, country in countries.items():
             filewriter.writerow(['Date', 'AffiliateGroup', 'CountryId','Cost'])
             for value in data:
                 filewriter.writerow(value)
+        with open(path + 'log'+ '.csv', 'w', newline='') as csvfile:
+            filewriter = csv.writer(csvfile, delimiter=',',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            filewriter.writerow(['Log date', now])
+            filewriter.writerow(['Filename', 'Status'])
+            filewriter.writerow([input_file + country,'Done'])
 
 
     wb.close
