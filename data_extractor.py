@@ -4,16 +4,16 @@ import datetime
 
 now=datetime.datetime.now()
 #dictionary for iterating between files 
-#countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
-countries={9:"Austria"}
-print(f'Started at: {now.strftime("%H:%M")}')
+countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
+#countries={9:"Austria"}
+print('Started at: {}'.format(now.strftime("%H:%M")))
 for c_id, country in countries.items():
 
-    #path='C:\\Users\\mKorotkov\\Documents\\'
-    #input_file='Channel Controlling 2018 '
+    path='C:\\Users\\mKorotkov\\Documents\\Channel Controlling 2018\\'
+    input_file='Channel Controlling 2018 '
     #open the workbook
-    path='C:\\Users\\Michael\\Downloads\\'
-    input_file='source_file_'
+    #path='C:\\Users\\Michael\\Downloads\\'
+    #input_file='source_file_'
     wb = openpyxl.load_workbook(path + input_file + country + '.xlsx',read_only=True, data_only=True)
 
     sheets =  wb.sheetnames #list of sheet names
@@ -72,4 +72,4 @@ for c_id, country in countries.items():
 
 
     wb.close
-print(f'Ended at: {now.strftime("%H:%M")}')
+print('Ended at: {}'.format(now.strftime("%H:%M")))
