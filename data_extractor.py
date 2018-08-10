@@ -7,8 +7,10 @@ cur_date=now.strftime("%Y%m%d")
 #dictionary for iterating between files 
 #countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
 countries={9:"Austria"}
-path='C:\\Users\\mKorotkov\\Documents\\Channel Controlling 2018\\'
-input_file='Channel Controlling 2018 '
+#path='C:\\Users\\mKorotkov\\Documents\\Channel Controlling 2018\\'
+#input_file='Channel Controlling 2018 '
+path='C:\\Users\\Michael\\Downloads\\'
+input_file='source_file_'
 #clearing the log file
 with open(path + 'log'+ '.csv', 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter=',',
@@ -20,8 +22,7 @@ with open(path + cur_date +'_output'+ '.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             filewriter.writerow(['Date', 'AffiliateGroup', 'CountryId','Cost'])
-#path='C:\\Users\\Michael\\Downloads\\'
-#input_file='source_file_'
+
 print('Started at: {}'.format(now.strftime("%H:%M")))
 for c_id, country in countries.items():
 
@@ -38,18 +39,16 @@ for c_id, country in countries.items():
         popped = sheets.pop(0)
         i+=1
     sheets.pop()
-    #print(sheets)
-
-    #preparing lists for data that will be extracted from each sheet
-    dates=[]
-    costs=[]
-    aff_group=[]
-    country_id=[]
-    data=[]
+    
     #iterating between the sheets and extracting the data
     for sheet in sheets:
+        #preparing lists for data that will be extracted from each sheet
+        dates=[]
+        costs=[]
+        aff_group=[]
+        country_id=[]
+        data=[]
         started=datetime.datetime.now().strftime("%H:%M")
-        data=None
         sheet=wb[sheet]
         sheet_name=sheet[502][0].value
         # extracting only cost and date
@@ -67,16 +66,13 @@ for c_id, country in countries.items():
                 country_id.append(c_id)
         #putting lists together into a list of tuples 
         data=list(zip(dates,aff_group,country_id,costs))
-        #print(data)
-
-        
+       
             #wiriting into the csv file
         with open(path + cur_date +'_output'+ '.csv', 'a+', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             for value in data:
                 filewriter.writerow(value)
-                print(value)
         #log also the sheet names for debugging        
         #with open(path + 'log'+ '.csv', 'a+', newline='') as csvfile:
         #    filewriter = csv.writer(csvfile, delimiter=',',
