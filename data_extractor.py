@@ -7,10 +7,10 @@ cur_date=now.strftime("%Y%m%d")
 #dictionary for iterating between files 
 #countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
 countries={9:"Austria"}
-#path='C:\\Users\\mKorotkov\\Documents\\Channel Controlling 2018\\'
-#input_file='Channel Controlling 2018 '
-path='C:\\Users\\Michael\\Downloads\\'
-input_file='source_file_'
+path='C:\\Users\\mKorotkov\\Documents\\Channel Controlling 2018\\'
+input_file='Channel Controlling 2018 '
+#path='C:\\Users\\Michael\\Downloads\\'
+#input_file='source_file_'
 #clearing the log file
 with open(path + 'log'+ '.csv', 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter=',',
@@ -28,7 +28,7 @@ for c_id, country in countries.items():
 
 
     #open the workbook
-
+    started=datetime.datetime.now().strftime("%H:%M")
     wb = openpyxl.load_workbook(path + input_file + country + '.xlsx',read_only=True, data_only=True)
 
     sheets =  wb.sheetnames #list of sheet names
@@ -48,7 +48,6 @@ for c_id, country in countries.items():
         aff_group=[]
         country_id=[]
         data=[]
-        started=datetime.datetime.now().strftime("%H:%M")
         sheet=wb[sheet]
         sheet_name=sheet[502][0].value
         # extracting only cost and date
