@@ -1,29 +1,63 @@
 import openpyxl
 import csv
 import datetime
+import win32com.client
+
+def refresh_cc_sheets(path,input_file,countries):
+# Open Excel
+    
+    Application = win32com.client.Dispatch("Excel.Application")
+ 
+ # Show Excel. While this is not required, it can help with debugging
+    Application.Visible = 1
+    Application.DisplayAlerts=False
+    Application.AskToUpdateLinks = False
+
+    for  country in countries.values():
+ # Open Your Workbook
+        Workbook = Application.Workbooks.open(path + input_file + country + '.xlsx')
+        try:
+            Workbook.UpdateLink(Name=Workbook.LinkSources())
+
+        except Exception as e:
+            print(e)
+        # Refesh All
+        Workbook.RefreshAll()
+        Application.CalculateUntilAsyncQueriesDone()
+        print(country + ' - Done')
+    # Saves the Workbook
+        Workbook.Save()
+        Workbook.Close()
+    Application.Visible = 0
+    Application.DisplayAlerts=True
+    Application.AskToUpdateLinks = True
+ # Closes Excel
+    Application.Quit()
 
 now=datetime.datetime.now()
 cur_date=now.strftime("%Y%m%d")
 #dictionary for iterating between files 
-#countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
-countries={9:"Austria"}
-path='C:\\Users\\mKorotkov\\Documents\\Channel Controlling 2018\\'
+countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
+#countries={9:"Austria"}
+path='Z:\\800-Management\\830-Controlling\\833-Marketing\\Channel Controlling 2018\\'
 input_file='Channel Controlling 2018 '
+print('Started at: {}'.format(now.strftime("%H:%M")))
+refresh_cc_sheets(path,input_file,countries)
+
 #path='C:\\Users\\Michael\\Downloads\\'
 #input_file='source_file_'
 #clearing the log file
-with open(path + 'log'+ '.csv', 'w', newline='') as csvfile:
-    filewriter = csv.writer(csvfile, delimiter=',',
-                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    filewriter.writerow(['Log date', now])
-    filewriter.writerow(['Filename', 'Status'])
+#with open(path + 'log'+ '.csv', 'w', newline='') as csvfile:
+#    filewriter = csv.writer(csvfile, delimiter=',',
+#                                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+#    filewriter.writerow(['Log date', now])
+ #   filewriter.writerow(['Filename', 'Status'])
 #clearing the output file
 with open(path + cur_date +'_output'+ '.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             filewriter.writerow(['Date', 'AffiliateGroup', 'CountryId','Cost'])
 
-print('Started at: {}'.format(now.strftime("%H:%M")))
 for c_id, country in countries.items():
 
 
