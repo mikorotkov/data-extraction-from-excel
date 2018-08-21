@@ -2,6 +2,7 @@ import openpyxl
 import csv
 import datetime
 import win32com.client
+from babel.numbers import format_decimal
 
 def refresh_cc_sheets(path,input_file,countries):
 # Open Excel
@@ -56,7 +57,7 @@ refresh_cc_sheets(path,input_file,countries)
 with open(path + cur_date +'_output'+ '.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            filewriter.writerow(['Date', 'AffiliateGroup', 'CountryId','Cost'])
+            filewriter.writerow(['AffiliateGroup', 'Date', 'Cost', 'CountryId'])
 
 for c_id, country in countries.items():
 
@@ -87,7 +88,7 @@ for c_id, country in countries.items():
         # extracting only cost and date
         for row in sheet.iter_rows(min_row=3,max_row=408, min_col=1, max_col=7):
             datum = row[0].value
-            cost = row[6].value
+            cost = format_decimal(row[6].value, locale='de_DE')
             #removing blank cells
             if datum == None:
                 continue
@@ -98,7 +99,7 @@ for c_id, country in countries.items():
                 aff_group.append(sheet_name)
                 country_id.append(c_id)
         #putting lists together into a list of tuples 
-        data=list(zip(dates,aff_group,country_id,costs))
+        data=list(zip(aff_group,dates,costs,country_id))
        
             #wiriting into the csv file
         with open(path + cur_date +'_output'+ '.csv', 'a+', newline='') as csvfile:
