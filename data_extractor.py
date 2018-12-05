@@ -4,6 +4,7 @@ import datetime
 import win32com.client
 from babel.numbers import format_decimal
 
+#refresh excel files function
 def refresh_cc_sheets(path,input_file,countries):
 # Open Excel
     
@@ -35,6 +36,8 @@ def refresh_cc_sheets(path,input_file,countries):
  # Closes Excel
     Application.Quit()
 
+
+#main part
 now=datetime.datetime.now()
 cur_date=now.strftime("%Y%m%d")
 #dictionary for iterating between files 
@@ -71,9 +74,10 @@ for c_id, country in countries.items():
     #removing summary, beispiel and data pivot sheets
     i=0
     while i <=1:
-        popped = sheets.pop(0)
+        sheets.pop(0)
         i+=1
     sheets.pop()
+    #sheets=list(filter(lambda sheet:sheet in ['Summary','Beispiel_1','data pivot'],sheets))
     
     #iterating between the sheets and extracting the data
     for sheet in sheets:
