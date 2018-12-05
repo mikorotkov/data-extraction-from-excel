@@ -38,15 +38,15 @@ def refresh_cc_sheets(path,input_file,countries):
 now=datetime.datetime.now()
 cur_date=now.strftime("%Y%m%d")
 #dictionary for iterating between files 
-countries={9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland", 2:"UK", 12:"USA", 14:"Netherlands", 10:"Belgium"}
+countries={2:"UK", 9:"Austria", 3:"Europe", 6:"France", 1:"Germany", 11:"Italy", 13:"Spain", 7:"Switzerland",  12:"USA", 14:"Netherlands", 10:"Belgium"}
 path='Z:\\800-Management\\830-Controlling\\833-Marketing\\Channel Controlling 2018\\'
 input_file='Channel Controlling 2018 '
 print('Started at: {}'.format(now.strftime("%H:%M")))
 
-refresh_cc_sheets(path,input_file,countries)
+#refresh_cc_sheets(path,input_file,countries)
 
 
-with open(path + cur_date +'_output'+ '.csv', 'w', newline='') as csvfile:
+with open(path + 'DailyCostExtraction'+ '.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             filewriter.writerow(['AffiliateGroup', 'Date', 'Cost', 'CountryId'])
@@ -84,7 +84,7 @@ for c_id, country in countries.items():
             #removing blank cells
             if datum == None:
                 continue
-            if cost not in [None,0,'#N/A','#VALUE!']:
+            if cost not in [None,0,'#N/A','#VALUE!','#REF!']:
                 #adding data to list
                 dates.append(datum.strftime("%Y-%m-%d"))
                 costs.append(format_decimal(cost, locale='de_DE')) #formating numbers in German style
@@ -94,7 +94,7 @@ for c_id, country in countries.items():
         data=list(zip(aff_group,dates,costs,country_id))
        
             #wiriting into the csv file
-        with open(path + cur_date +'_output'+ '.csv', 'a+', newline='') as csvfile:
+        with open(path + 'DailyCostExtraction'+ '.csv', 'a+', newline='') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
             for value in data:
