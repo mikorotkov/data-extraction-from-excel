@@ -1,6 +1,4 @@
-#import openpyxl
 import pandas as pd
-from pandas import ExcelWriter
 from pandas import ExcelFile
 import csv
 import datetime
@@ -47,7 +45,8 @@ def extract_data():
     #cur_date=now.strftime("%Y%m%d")
     #dictionary for iterating between files 
     countries={2:"UK"}
-    path='Z:\\800-Management\\830-Controlling\\833-Marketing\\Channel Controlling 2018\\'
+    #path='Z:\\800-Management\\830-Controlling\\833-Marketing\\Channel Controlling 2018\\'
+    path='C:\\Users\\Michael\\Downloads\\'
     input_file='Channel Controlling 2018 '
     print('Started at: {}'.format(now.strftime("%H:%M")))
 
@@ -67,42 +66,35 @@ def extract_data():
         #wb = pd.read_excel(path + input_file + country + '.xlsx',  header=1) #openpyxl.load_workbook(path + input_file + country + '.xlsx',read_only=True, data_only=True)
         #wb = pd.ExcelFile(path + input_file + country + '.xlsx')
         with pd.ExcelFile(path + input_file + country + '.xlsx') as xls:
-            print(xls.sheet_names)
-            sheet = pd.read_excel(xls, xls.sheet_names[1], header=1)
-            print("Column headings:")
-            print(sheet.columns)
-            xls.close()
-        """
-
-        sheets =  wb. #list of sheet names
-        print(sheets)
-
-        #removing summary, beispiel and data pivot sheets
-        i=0
+            sheets = xls.sheet_names
+            #removing summary, beispiel and data pivot sheets
+            i=0
         while i <=1:
             sheets.pop(0)
             i+=1
         sheets.pop()
-        
-        #iterating between the sheets and extracting the data
+            #iterating between the sheets and extracting the data
         for sheet in sheets:
-            print(sheet)
+
             #preparing lists for data that will be extracted from each sheet
             dates=[]
             costs=[]
             aff_group=[]
             country_id=[]
             data=[]
-            sheet=wb[sheet]
-            sheet_name=sheet[502][0].value
-            # extracting only cost and date
-            for row in sheet.iter_rows(min_row=3,max_row=408, min_col=1, max_col=7):
-                datum = row[0].value
-                cost = row[6].value
+            active_sheet = pd.read_excel(xls, sheet_name=sheet, header=1)
+            #print("Column headings:")
+            #print(active_sheet.columns)
+            sheet_name=active_sheet.loc[499,'date']
+            #print(sheet_name)
+            for i in range(0,405):
+                # extracting only cost and date
+                datum=active_sheet.loc[i,'date']
+                cost = active_sheet.loc[i,'Costs']
                 #removing blank cells
-                if datum == None:
+                if str(datum) == 'nan':
                     continue
-                if cost not in [None,0,'#N/A','#VALUE!','#REF!']:
+                if str(cost) not in ['None','0','nan','#N/A','#VALUE!','#REF!']:
                     #adding data to list
                     dates.append(datum.strftime("%Y-%m-%d"))
                     costs.append(format_decimal(cost, locale='de_DE')) #formating numbers in German style
@@ -125,8 +117,8 @@ def extract_data():
 
         print('{}{} Done Started at:{} Ended at:{}'.format(input_file,country,started,datetime.datetime.now().strftime("%H:%M")))
 
-"""   
-        #wb.close
+
+    xls.close()
     now=datetime.datetime.now()
     print('Ended at: {}'.format(now.strftime("%H:%M")))
 
